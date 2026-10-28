@@ -28,7 +28,7 @@
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/brieftaube.git
+git clone https://github.com/realmosn/brieftaube.git
 cd brieftaube
 ```
 
