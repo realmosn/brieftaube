@@ -1,0 +1,105 @@
+%% ==========================================================================
+%% KI-BRIEFVORLAGE  –  Anleitung für die KI (Claude, ChatGPT o. ä.)
+%% ==========================================================================
+%% Der Nutzer fügt diese Datei ein und beschreibt den Brief, den er braucht.
+%% DEINE AUFGABE: Gib EINE vollständige, kompilierbare .tex-Datei zurück,
+%% in der jeder Platzhalter ersetzt ist, plus Dateiname und Speicherort.
+%%
+%% 1. PLATZHALTER
+%%    - Im Text:     \PH{...}    (erscheint im PDF rot, falls vergessen)
+%%    - In Zeilen mit  %% <-- KI  am Ende: Wert anpassen oder Zeile löschen.
+%%    - Am Ende darf KEIN \PH{ mehr vorkommen. Fehlt eine Information
+%%      (z. B. Kundennummer), frage nach oder lass genau diesen \PH{...}
+%%      stehen und sag dem Nutzer, was noch fehlt. Nichts erfinden.
+%%
+%% 2. ABSENDER – NICHT IN DIESE DATEI SCHREIBEN
+%%    Name, Adresse, Telefon, E-Mail und Unterschrift kommen automatisch
+%%    aus der absender.lco im Ordner des Briefes (oder darüber).
+%%    Personen in diesem Projekt (vom Nutzer einmalig ANPASSEN):
+%%      Max/...    ->  Max Mustermann
+%%      Erika/...  ->  Erika Mustermann
+%%    Frag, von wem der Brief ist, falls das nicht klar ist.
+%%
+%% 3. DATEINAME UND ORDNER (im Antworttext nennen)
+%%    Ordner:     <Person>/<Thema>/      z. B. Erika/Krankenkasse/
+%%    Dateiname:  JJJJ-MM-TT-Empfaenger-Thema.tex
+%%                z. B. 2026-10-18-TK-Kostenuebernahme.tex
+%%    Nur a–z, A–Z, 0–9 und Bindestrich; Umlaute als ae/oe/ue, ß als ss.
+%%
+%% 4. STIL
+%%    Deutsch, Sie-Form, sachlich und höflich, DIN 5008.
+%%    Muss auf EINE Seite passen (Anlagen ausgenommen) – lieber kürzen.
+%%    Bei Fristen ein konkretes Datum nennen (TT.MM.JJJJ).
+%%
+%% 5. LATEX-REGELN
+%%    - Sonderzeichen maskieren:  \&  \%  \$  \#  \_
+%%    - Anführungszeichen:  „Text“      Geschütztes Leerzeichen:  Art.~15
+%%    - Abkürzungen:  z.\,B.   d.\,h.   u.\,a.   Nr.~123   §~109 GewO
+%%    - Zeilenumbruch in der Anschrift:  \\   – beginnt die nächste Zeile
+%%      mit [ , dann  \\\relax[  schreiben.
+%%    - Aufzählungen nur mit \begin{itemize} / \begin{enumerate}
+%%      (Optional [before=\small], wenn der Platz knapp wird.)
+%%    - Keine neuen Pakete laden, \documentclass NICHT hinzufügen
+%%      (beides steckt in brief-layout).
+%%
+%% 6. ANLAGEN (nur wenn der Nutzer welche nennt)
+%%    a) Im Brief: \encl{Titel 1\\Titel 2} vor \end{letter} (Liste „Anlage(n):“).
+%%    b) Nach \end{letter}, gleiche Reihenfolge, je Datei eine Zeile:
+%%         \anlage[Titel 1]{anlagen/datei1.pdf}
+%%         \anlage[Titel 2]{anlagen/foto.jpg}
+%%         \anlage[Titel 3][pages={1,3}]{anlagen/datei3.pdf}   (nur Seiten 1 und 3)
+%%       Erlaubt: PDF, JPG, PNG. Dateien liegen im Unterordner anlagen/ neben
+%%       dem Brief; Dateinamen ohne Leerzeichen und Umlaute.
+%%       Jede Seite erhält oben rechts „Anlage N: Titel“.
+%%    c) Dem Nutzer sagen, welche Dateien mit welchem Namen nach anlagen/ gehören.
+%% ==========================================================================
+
+\input{brief-layout}
+% Platzhalter-Markierung: im PDF rot und fett, damit nichts übersehen wird
+\providecommand{\PH}[1]{\textcolor{red}{\textbf{[#1]}}}
+
+% --- PDF-Titel (erscheint in den PDF-Eigenschaften) -----------------------
+\hypersetup{pdftitle={Kurzer Titel, z.B. Kündigung Mobilfunkvertrag}}  %% <-- KI
+
+% --- Betreff (fett über der Anrede, ohne „Betreff:“) ----------------------
+\setkomavar{subject}{\PH{Betreff, z.B. Kündigung meines Vertrags Nr.~123456}}
+
+% --- Bezugszeichen: nur nutzen, wenn vorhanden, sonst Zeile löschen -------
+% \setkomavar{yourref}{\PH{Zeichen des Empfängers}}            %% <-- KI "Ihr Zeichen"
+% \setkomavar{yourmail}{\PH{TT.MM.JJJJ}}                       %% <-- KI "Ihr Schreiben vom"
+% \setkomavar{customer}{\PH{Kundennummer}}                     %% <-- KI "Kundennummer"
+% \setkomavar{date}{\PH{TT.MM.JJJJ}}                           %% <-- KI nur falls NICHT heute
+
+\begin{document}
+\begin{letter}{%
+    \PH{Firma oder Behörde}\\
+    \PH{z.\,Hd.\ Abteilung oder Person – Zeile löschen, falls unbekannt}\\
+    \PH{Straße Hausnummer oder Postfach}\\
+    \PH{PLZ Ort}%
+    % \\\PH{LAND – nur bei Auslandsbriefen, in Großbuchstaben}
+  }
+
+  % Anrede: bekannte Person -> „Sehr geehrte Frau Muster,“ / „Sehr geehrter Herr Muster,“
+  \opening{Sehr geehrte Damen und Herren,}                       %% <-- KI
+
+  \PH{Einleitung: worum es geht, mit Bezug (Vertrags-/Kunden-/Aktenzeichen, Datum).}
+
+  \PH{Hauptteil: Sachverhalt und Anliegen. Bei mehreren Punkten eine Liste verwenden:}
+  % \begin{enumerate}
+  %   \item \PH{erster Punkt}
+  %   \item \PH{zweiter Punkt}
+  % \end{enumerate}
+
+  \PH{Schluss: konkrete Bitte mit Frist, z.B. „Bitte bestätigen Sie mir dies schriftlich bis zum TT.MM.JJJJ.“}
+
+  \closing{Mit freundlichen Grüßen}                              %% <-- KI
+
+  % --- Optional: nur behalten, wenn zutreffend -----------------------------
+  % \encl{\PH{Titel Anlage 1}\\\PH{Titel Anlage 2}}              %% <-- KI Anlagenliste
+  % \cc{\PH{Name der Person in Kopie}}                           %% <-- KI Kopie an
+\end{letter}
+
+% --- Anlagen anhängen (siehe Anleitung Punkt 6), sonst Zeilen löschen ------
+% \anlage[\PH{Titel Anlage 1}]{anlagen/datei1.pdf}               %% <-- KI
+% \anlage[\PH{Titel Anlage 2}]{anlagen/foto.jpg}                 %% <-- KI
+\end{document}

@@ -1,0 +1,36 @@
+% ============================================================
+%  absender.lco – Absenderdaten (VORLAGE)
+%  Kopieren nach <Person>/absender.lco (mehrere Absender) oder
+%  ./absender.lco im Projektordner (ein Absender) und anpassen.
+%  Gilt für ALLE Briefe in diesem Ordner und seinen Unterordnern
+%  (brief-layout.tex sucht die nächstgelegene absender.lco).
+%  Eine eingescannte Unterschrift (unterschrift.png) gehört in
+%  DENSELBEN Ordner wie diese Datei.
+% ============================================================
+\ProvidesFile{absender.lco}[2026/10/28 v1.3 Absenderdaten]
+
+% --- Persönliche Daten ------------------------------------ ANPASSEN ------
+\def\absendername{Vorname Nachname}
+\setkomavar{fromname}{\absendername}
+\setkomavar{fromaddress}{Straße Hausnummer\\PLZ Ort}
+\setkomavar{fromphone}{+49~000~0000000}
+\setkomavar{fromemail}{name@example.com}
+
+% Rücksendeangabe: einzeilig, klein, im Fensterbereich über der Anschrift
+\setkomavar{backaddress}{Vorname Nachname, Straße Hausnummer, PLZ Ort}
+
+% --- Eingescannte Unterschrift -------------------------------------------
+% PNG mit transparentem Hintergrund, Name: unterschrift.png, im selben
+% Ordner wie diese Datei. Fehlt sie, bleibt Platz zum Unterschreiben.
+\newcommand{\unterschriftsbild}{%
+  \IfFileExists{\absenderdir/unterschrift.png}{%
+    \includegraphics[height=15mm]{\absenderdir/unterschrift.png}%   Höhe ANPASSEN
+  }{%
+    \rule{0pt}{15mm}%  Platzhalter gleicher Höhe
+  }%
+}
+
+% Unterschriftenbild ÜBER dem gedruckten Namen
+\setkomavar{signature}{\unterschriftsbild\\\absendername}
+
+\endinput

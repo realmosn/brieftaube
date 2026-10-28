@@ -1,0 +1,37 @@
+% Beispiel: Auskunftsersuchen nach Art. 15 DSGVO mit Aufzählung und Anlage.
+% Absender: beispiele/Erika/absender.lco (ohne Unterschriftsbild -> Platz zum Unterschreiben)
+\input{brief-layout}
+\hypersetup{pdftitle={Auskunftsersuchen nach Art. 15 DSGVO}}
+
+\setkomavar{subject}{Auskunftsersuchen nach Art.~15 DSGVO}
+\setkomavar{yourref}{KD-2026-0815}
+\setkomavar{date}{01.02.2026}
+
+\begin{document}
+\begin{letter}{%
+    Beispiel Versand GmbH\\
+    z.\,Hd.\ Datenschutzbeauftragte/r\\
+    Postfach 12\,34\\
+    12345 Musterstadt%
+  }
+
+  \opening{Sehr geehrte Damen und Herren,}
+
+  gemäß Art.~15 DSGVO bitte ich um Auskunft, ob Sie personenbezogene Daten über mich verarbeiten, und falls ja, um:
+  \begin{enumerate}
+    \item eine Kopie aller über mich gespeicherten Daten (Art.~15 Abs.~3 DSGVO),
+    \item die Zwecke und Rechtsgrundlagen der Verarbeitung sowie die geplante Speicherdauer,
+    \item die Empfänger oder Kategorien von Empfängern, denen die Daten offengelegt wurden,
+    \item die Herkunft der Daten, soweit sie nicht bei mir erhoben wurden.
+  \end{enumerate}
+
+  Zur Identifizierung lege ich die Kopie meines Kundenschreibens bei. Bitte antworten Sie binnen eines Monats (Art.~12 Abs.~3 DSGVO).
+
+  \closing{Mit freundlichen Grüßen}
+
+  \encl{Kundenschreiben vom 10.01.2026}
+\end{letter}
+
+% Anlagen werden hinten angehängt und oben rechts gestempelt
+\anlage[Kundenschreiben vom 10.01.2026]{anlagen/kundenschreiben-muster.pdf}
+\end{document}

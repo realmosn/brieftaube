@@ -1,0 +1,31 @@
+# ============================================================
+#  latexmkrc – Build-Einstellungen für ALLE Briefe
+#  Wird von VS Code (LaTeX Workshop) über .vscode/settings.json geladen.
+#  Hier normalerweise nichts ändern.
+# ============================================================
+use File::Basename;
+use Cwd 'abs_path';
+
+# Ordner dieser Datei = _vorlage/  (latexmk merkt sich die gelesene rc-Datei)
+my $vorlage = @rc_files_read ? dirname(abs_path($rc_files_read[-1])) : '';
+# Fallback: vom Briefordner aus nach oben nach _vorlage/ suchen
+unless ( $vorlage && -e "$vorlage/brief-layout.tex" ) {
+    my $d = abs_path('.');
+    while ( $d ne '/' && ! -d "$d/_vorlage" ) { $d = dirname($d); }
+    $vorlage = "$d/_vorlage";
+}
+
+# Suchpfade: Layout, absender.lco, unterschrift.png ...
+ensure_path('TEXINPUTS', "$vorlage//");
+# ... und die Schriften in _vorlage/fonts/
+ensure_path('OPENTYPEFONTS', "$vorlage/fonts//");
+ensure_path('TTFONTS', "$vorlage/fonts//");
+
+# LuaLaTeX statt pdfLaTeX
+$pdf_mode = 4;
+$postscript_mode = $dvi_mode = 0;
+
+# Hilfsdateien (.aux, .log, ...) in einen versteckten Unterordner,
+# damit neben dem Brief nur .tex und .pdf liegen.
+$aux_dir = '.build';
+

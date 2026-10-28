@@ -1,0 +1,25 @@
+# --- Privacy first ---------------------------------------------------------
+# Your own letters, sender data and signatures stay OUT of Git by default.
+# Only the template, the docs and the fictional examples are versioned.
+/*/
+!/_vorlage/
+!/.vscode/
+!/beispiele/
+!/docs/
+/absender.lco
+/unterschrift.png
+
+# --- Build output ----------------------------------------------------------
+.build/
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.log
+*.aux
+*.out
+*.pdf
+!beispiele/**/anlagen/*.pdf
+
+# --- OS / editor -------------------------------------------------------------
+.DS_Store
+indent.log

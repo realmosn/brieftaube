@@ -1,0 +1,55 @@
+{
+  // Workspace settings for VS Code + LaTeX Workshop.
+  // They only apply when THIS folder is opened (File → Open Folder),
+  // not a parent folder.
+
+  // --- Build: latexmk with the project's latexmkrc (LuaLaTeX + search paths)
+  // "-cd" builds inside the letter's own folder, so the PDF lands next to the .tex.
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-brief",
+      "command": "latexmk",
+      "args": [
+        "-r", "%WORKSPACE_FOLDER%/_vorlage/latexmkrc",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-cd",
+        "%DOC%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    { "name": "Brief (LuaLaTeX)", "tools": ["latexmk-brief"] }
+  ],
+  "latex-workshop.latex.recipe.default": "first",
+  "latex-workshop.latex.outDir": "%DIR%",
+
+  // Letters get \documentclass from brief-layout.tex, so detect them by
+  // \begin{document} instead of the default \documentclass.
+  "latex-workshop.latex.rootFile.indicator": "\\begin{document}",
+  "latex-workshop.latex.search.rootFiles.exclude": ["**/_vorlage/**"],
+
+  // Build on save (Cmd/Ctrl+S). Auto-save is off here so a build only runs
+  // while the letter is the active editor.
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "files.autoSave": "off",
+
+  // Aux files live in the hidden .build/ folder and latexmk needs them.
+  "latex-workshop.latex.autoClean.run": "never",
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+
+  "latex-workshop.view.pdf.viewer": "tab",
+
+  // No automatic reformatting of letters (latexindent needs extra Perl modules).
+  "[latex]": { "editor.formatOnSave": false },
+
+  // Spell/grammar check in German if the LTeX extension is installed.
+  "ltex.language": "de-DE",
+
+  "files.exclude": {
+    "**/.build": true,
+    "**/*.synctex.gz": true
+  }
+}

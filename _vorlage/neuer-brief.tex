@@ -1,0 +1,37 @@
+% ============================================================
+%  Neuer Brief: Diese Datei in einen Themenordner (z. B. Max/Vertraege/)
+%  KOPIEREN, umbenennen, ANPASSEN-Stellen ausfüllen, speichern.
+%  Der Absender ergibt sich aus der nächstgelegenen absender.lco.
+%  Das PDF erscheint automatisch neben der .tex-Datei.
+% ============================================================
+\input{brief-layout}
+\hypersetup{pdftitle={Betreff}}                    % ANPASSEN
+
+% --- Betreff und optionale Bezugszeichen ---------------- ANPASSEN --------
+\setkomavar{subject}{Betreff des Briefes}
+% \setkomavar{yourref}{AZ-123}                     % "Ihr Zeichen"
+% \setkomavar{customer}[Aktenzeichen:~]{00000}     % eigenes Aktenzeichen
+% \setkomavar{date}{01.01.2026}                    % sonst: heute
+
+\begin{document}
+\begin{letter}{%
+    Musterfirma GmbH\\
+    Kundenservice\\
+    Beispielweg 3\\
+    80331 München%
+  }
+
+  \opening{Sehr geehrte Damen und Herren,}
+
+  Brieftext.
+
+  \closing{Mit freundlichen Grüßen}
+
+  % \encl{Vertragskopie\\Vollmacht}
+  % \cc{Frau Beispiel, Verbraucherzentrale}
+\end{letter}
+
+% Anlagen (PDF/JPG/PNG aus dem Unterordner anlagen/) hinten anhängen:
+% \anlage[Vertragskopie]{anlagen/vertrag.pdf}
+% \anlage[Vollmacht]{anlagen/vollmacht.jpg}
+\end{document}

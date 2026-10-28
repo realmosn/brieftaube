@@ -1,0 +1,191 @@
+% !TeX program = lualatex
+% ============================================================
+%  brief-layout.tex – gemeinsames Layout für alle Briefe
+%  Formaler deutscher Brief nach DIN 5008 (Form B)
+%  Klasse: KOMA-Script scrlttr2 · Engine: LuaLaTeX
+%
+%  Liegt im Ordner _vorlage/ und wird von JEDEM Brief in JEDEM
+%  Themenordner mit \input{brief-layout} geladen. Gefunden wird es über
+%  _vorlage/latexmkrc (setzt die Suchpfade für TeX-Dateien und Schriften).
+%  Schriften: _vorlage/fonts/ · Absenderdaten: <Person>/absender.lco
+% ============================================================
+\documentclass[
+  fontsize=11pt,
+  paper=a4,
+  parskip=half,
+  enlargefirstpage,
+  foldmarks=true,
+  foldmarks=TBMP,        % Faltmarken oben/Mitte/unten + Lochmarke
+  backaddress=true,      % Rücksendeangabe im Fenster
+  subject=beforeopening,
+  subject=untitled,      % Betreff fett, ohne "Betreff:" (DIN 5008)
+]{scrlttr2}
+
+\LoadLetterOption{DIN}   % Anschriftfeld/Geometrie für DIN-lang-Fensterkuvert
+
+% --- Satzspiegel nach DIN 5008: links 25 mm, rechts 20 mm ------------------
+% (KOMA-Standard ergab ~31,5 mm links/rechts; Anschrift und Text standen
+%  dadurch nicht auf derselben Fluchtlinie.)
+\setlength{\oddsidemargin}{\dimexpr 25mm-1in\relax}
+\setlength{\evensidemargin}{\oddsidemargin}
+\setlength{\textwidth}{\dimexpr\paperwidth-25mm-20mm\relax}
+% Anschrift beginnt bei 20 mm (Fensterrand) + 5 mm Einzug = 25 mm,
+% also bündig mit Brieftext, Kopf und Betreff.
+\setplength{toaddrindent}{5mm}
+% Unterer Rand der Folgeseiten: KOMA-Standard ließ den Text bei ca. 239 mm
+% enden (fast 6 cm Rand). Jetzt endet er bei 265 mm, die Fußzeile steht bei
+% 277 mm. (Seite 1 wird über enlargefirstpage bis kurz vor den Fuß genutzt.)
+\setlength{\textheight}{\dimexpr 265mm-(1in+\voffset+\topmargin+\headheight+\headsep)\relax}
+
+% --- Grafiken (eingescannte Unterschrift) — vor absender.lco laden! ------
+\usepackage{graphicx}
+
+% --- Absenderdaten: nächstgelegene absender.lco -----------------------------
+% Gesucht wird vom Ordner des Briefes aus nach oben. So gilt Max/absender.lco
+% für alles unter Max/, Erika/absender.lco für alles unter Erika/.
+% Ein Brief kann eine eigene absender.lco im eigenen Ordner haben (gewinnt).
+% Nur ein Absender? Dann genügt eine absender.lco im Projektordner.
+\directlua{
+  local d = lfs.currentdir():gsub(string.char(92), "/")  % Windows: \ -> /
+  local found = ""
+  while d and d ~= "" do
+    if lfs.isfile(d .. "/absender.lco") then found = d break end
+    local parent = d:match("^(.*)/[^/]+$")
+    if not parent or parent == "" or parent == d then break end
+    d = parent
+  end
+  token.set_macro("absenderdir", found)
+}
+\ifx\absenderdir\empty
+  \errmessage{Keine absender.lco gefunden: Lege eine absender.lco in den
+    Ordner des Briefes oder einen Ordner darüber (Vorlage:
+    _vorlage/absender-vorlage.lco)}
+\else
+  \input{\absenderdir/absender.lco}
+\fi
+
+% --- Schrift: Source Sans 3 aus ./fonts/ ---------------------------------
+\usepackage{fontspec}
+% Schriften werden per Dateiname gefunden (Suchpfad aus latexmkrc),
+% darum hier KEIN Path=fonts/ – so klappt es aus jedem Unterordner.
+\setmainfont{SourceSans3}[
+  Extension      = .otf,
+  UprightFont    = *-Regular,
+  ItalicFont     = *-It,
+  BoldFont       = *-Semibold,       % Semibold als \textbf: ruhiger als Bold
+  BoldItalicFont = *-SemiboldIt,
+  Scale = 1.08,
+]
+\setsansfont{SourceSans3}[
+  Extension=.otf,
+  UprightFont=*-Regular, ItalicFont=*-It,
+  BoldFont=*-Semibold, BoldItalicFont=*-SemiboldIt,
+]% auch \sffamily (z. B. Rücksendeangabe) nutzt Source Sans
+\newfontfamily\NameSchrift{PlayfairDisplaySC-Black}[Extension=.ttf]
+
+\linespread{1.06}
+
+\usepackage[ngerman]{babel}
+\usepackage{microtype}
+
+% Kompakte Aufzählungen (z. B. Fragenkataloge)
+\usepackage{enumitem}
+\setlist{itemsep=0pt, parsep=0pt, topsep=2pt, partopsep=0pt, leftmargin=1.6em}
+
+% --- Farben ---------------------------------------------------------------
+\usepackage{xcolor}
+\definecolor{akzent}{RGB}{0, 82, 100}    % dunkles Petrol
+\definecolor{grau}{RGB}{88, 92, 96}      % Text im Kopf/Fuß
+
+% --- PDF-Metadaten + anklickbare Links (ohne farbige Rahmen) ---------------
+% Titel setzt jeder Brief selbst: \hypersetup{pdftitle={...}}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdfauthor={\absendername}, pdflang={de-DE}}
+
+% --- Seitenzahl "1/2" — nur bei mehrseitigen Briefen (DIN 5008) ------------
+% scrlttr2 schreibt für jeden Brief das Label "<Briefnr>.lastpage".
+% \thisletter liefert die Nummer des aktuellen Briefes, damit funktioniert
+% die Zählung auch, wenn mehrere Briefe in einer Datei stehen.
+% refcount liest die Seitenzahl als Zahl aus; ist der Brief einseitig,
+% bleibt die Fußzeile leer.
+\usepackage{refcount}
+\newcommand*{\seitenzahl}{%
+  \ifnum\getpagerefnumber{\thisletter.lastpage}>1
+    \thepage/\pageref{\thisletter.lastpage}%
+  \fi}
+
+% Folgeseiten: Seitenzahl unten LINKS (KOMA-Mechanismus scrlayer-scrpage)
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ifoot*{\footnotesize\color{grau}\seitenzahl}
+\pagestyle{scrheadings}
+
+% ==========================================================================
+%  BRIEFKOPF: Name links, Kontaktblock rechts, feine Akzentlinie darunter.
+%  Gespeist aus den Variablen in absender.lco – hier nichts eintragen.
+% ==========================================================================
+% Kopf/Fuß der ersten Seite exakt auf den Satzspiegel ausrichten. Erst bei
+% \begin{document} setzen, weil KOMA diese Längen vorher neu berechnet.
+\AtBeginDocument{%
+  \setplength{firstheadwidth}{\textwidth}%
+  \setplength{firstheadhpos}{\dimexpr 1in+\hoffset+\oddsidemargin\relax}%
+  \setplength{firstfootwidth}{\textwidth}%
+  \setplength{firstfoothpos}{\dimexpr 1in+\hoffset+\oddsidemargin\relax}%
+}
+\setplength{firstfootvpos}{277mm}
+
+\setkomavar{firsthead}{%
+  \begin{minipage}[b]{0.52\textwidth}
+    {\NameSchrift\fontsize{18pt}{20pt}\selectfont\color{akzent}%
+      \usekomavar{fromname}}%
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[b]{0.44\textwidth}
+    \raggedleft\footnotesize\color{grau}%
+    \usekomavar{fromaddress}\\[1pt]
+    \usekomavar{fromphone}\\[1pt]
+    \usekomavar{fromemail}%
+  \end{minipage}\\[2.5mm]
+  {\color{akzent}\rule{\textwidth}{0.6pt}}%
+}
+
+% Erste Seite: Seitenzahl ebenfalls unten links (nur wenn mehrseitig)
+\setkomavar{firstfoot}{\footnotesize\color{grau}\seitenzahl\hfill}
+
+% --- Bezugszeichen: nur setzen, wenn es eins gibt (pro Brief) --------------
+% z. B. \setkomavar{yourref}{AB-12345}     -> "Ihr Zeichen"
+%       \setkomavar{customer}[Aktenzeichen:~]{12345}
+
+% --- Grußformel und Unterschrift linksbündig am Satzspiegel ----------------
+\setplength{sigindent}{0mm}
+\renewcommand*{\raggedsignature}{\raggedright}
+% Abstand Gruß -> Unterschrift. Der Platz für die Unterschrift selbst
+% (Bild oder 15 mm Leerraum) kommt aus \unterschriftsbild in absender.lco.
+\setplength{sigbeforevskip}{2mm}
+
+\setkomavar{date}{\today}
+
+% --- Anlagen: PDF oder Bild (JPG/PNG) hinten an den Brief anhängen ---------
+% Nach \end{letter}, vor \end{document}:
+%   \anlage[Mietvertrag]{anlagen/mietvertrag.pdf}   alle Seiten eines PDFs
+%   \anlage[Ausweis]{anlagen/ausweis.jpg}            Foto oder Scan
+%   \anlage[Rechnung][pages={1,3}]{anlagen/re.pdf}   nur bestimmte Seiten
+% Jede Seite bekommt oben rechts den Stempel „Anlage N: <Titel>“.
+% Die Anlagenliste im Brief selbst bleibt \encl{...} vor \end{letter}.
+\usepackage{pdfpages}
+\newcounter{anlage}
+\NewDocumentCommand{\anlage}{o O{} m}{%
+  \stepcounter{anlage}%
+  \def\anlagestempel{Anlage~\theanlage\IfValueT{#1}{: #1}}%
+  \IfFileExists{#3}{%
+    \includepdf[pages=-, scale=0.92, #2,
+      pagecommand={\thispagestyle{empty}},
+      picturecommand={\put(\LenToUnit{\paperwidth-20mm},\LenToUnit{\paperheight-12mm}){%
+        \makebox[0pt][r]{\footnotesize\sffamily\color{grau}\anlagestempel}}}%
+    ]{#3}%
+  }{%
+    \clearpage\thispagestyle{empty}%
+    {\color{red}\bfseries \anlagestempel\ – Datei „\detokenize{#3}“ nicht gefunden}%
+    \clearpage
+  }%
+}

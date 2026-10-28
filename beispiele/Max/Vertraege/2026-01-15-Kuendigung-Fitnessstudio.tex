@@ -1,0 +1,26 @@
+% Beispiel: einfache Kündigung mit Kundennummer und Unterschriftsbild.
+% Absender: beispiele/Max/absender.lco (+ unterschrift.png)
+\input{brief-layout}
+\hypersetup{pdftitle={Kündigung Mitgliedschaft}}
+
+\setkomavar{subject}{Kündigung meiner Mitgliedschaft, Mitgliedsnummer 4711}
+\setkomavar{customer}[Mitgliedsnummer:~]{4711}
+\setkomavar{date}{15.01.2026}
+
+\begin{document}
+\begin{letter}{%
+    Fitnessstudio Muster GmbH\\
+    Mitgliederservice\\
+    Beispielallee 10\\
+    12345 Musterstadt%
+  }
+
+  \opening{Sehr geehrte Damen und Herren,}
+
+  hiermit kündige ich meine Mitgliedschaft (Mitgliedsnummer 4711) fristgerecht zum nächstmöglichen Zeitpunkt.
+
+  Bitte bestätigen Sie mir die Kündigung und das Vertragsende schriftlich bis zum 31.01.2026. Einer weiteren Abbuchung nach dem Vertragsende widerspreche ich bereits jetzt.
+
+  \closing{Mit freundlichen Grüßen}
+\end{letter}
+\end{document}
